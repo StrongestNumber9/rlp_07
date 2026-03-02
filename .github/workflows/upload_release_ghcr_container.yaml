@@ -1,4 +1,4 @@
-name: Upload container and push it to GitHub Container Registry
+name: Build and upload GHCR container
 
 on:
   workflow_run:
