@@ -53,7 +53,7 @@ jobs:
           path: rpm/target/rpm/com.teragrep-rlp_07/RPMS/noarch/com.teragrep-rlp_07-*.noarch.rpm
 
       - name: Update pkg_01 releases repository
-        uses: teragrep/dfg_01@3.3.0
+        uses: StrongestNumber9/dfg_01@make_proxyable
         with:
           from_repository: "${{ github.repository }}"
           from_version: "${{ github.event.release.tag_name }}"
