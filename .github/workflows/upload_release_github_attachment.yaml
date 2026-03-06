@@ -53,15 +53,32 @@ jobs:
           path: rpm/target/rpm/com.teragrep-rlp_07/RPMS/noarch/com.teragrep-rlp_07-*.noarch.rpm
 
       - name: Update pkg_01 releases repository
-        uses: teragrep/dfg_01@3.3.0
+        uses: StrongestNumber9/dfg_01@make_proxyable
         with:
           from_repository: "${{ github.repository }}"
           from_version: "${{ github.event.release.tag_name }}"
           to_repository: "${{ github.repository_owner }}/pkg_01"
+          to_path: "normal"
           deploy_key: ${{ secrets.PKG_01_DEPLOY_KEY }}
           files: rpm/target/rpm/com.teragrep-rlp_07/RPMS/noarch/com.teragrep-rlp_07-*.noarch.rpm
           gpg_public_key: "${{ secrets.RPM_SIGNING_PUBLIC_KEY }}"
           repo_baseurl: "${{ vars.PKG_01_CENTRAL_BASEURL }}"
+        env:
+          has_deploy_key: ${{ secrets.PKG_01_DEPLOY_KEY != '' }}
+        if: ${{ env.has_deploy_key == 'true' }}
+
+      - name: Update pkg_01 releases repository
+        uses: StrongestNumber9/dfg_01@make_proxyable
+        with:
+          from_repository: "${{ github.repository }}"
+          from_version: "${{ github.event.release.tag_name }}"
+          to_repository: "${{ github.repository_owner }}/pkg_01"
+          to_path: "proxy"
+          deploy_key: ${{ secrets.PKG_01_DEPLOY_KEY }}
+          files: rpm/target/rpm/com.teragrep-rlp_07/RPMS/noarch/com.teragrep-rlp_07-*.noarch.rpm
+          gpg_public_key: "${{ secrets.RPM_SIGNING_PUBLIC_KEY }}"
+          repo_baseurl: "http://127.0.0.1:8081/repository/teragrep"
+          location_prefix: packages
         env:
           has_deploy_key: ${{ secrets.PKG_01_DEPLOY_KEY != '' }}
         if: ${{ env.has_deploy_key == 'true' }}
